@@ -3,10 +3,17 @@
 # ~~~~
 
 # Home page
-GET        /                    controllers.Application.index
-GET        /crawl               controllers.Application.test
-GET        /test                controllers.Application.getTownWeather
-GET        /gcmtest             controllers.Application.testgcm
+GET        /                                     controllers.Application.index
+GET        /crawl                                controllers.Application.test
+GET        /test                                 controllers.Application.getTownWeather
+GET        /gcm/registerTest/:name/:regId        controllers.GCMService.registerTest(name : String, regId:String)
+
+
+# deploy
+GET        /gcm/register                         controllers.GCMService.register
+GET        /gcm/send/:regId/:msg                 controllers.GCMService.send(regId : String, msg : String)
+
+
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file        controllers.Assets.at(path="/public", file)
+GET        /assets/*file                         controllers.Assets.at(path="/public", file)
