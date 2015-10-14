@@ -3,6 +3,7 @@ package controllers
 import com.google.android.gcm.server.{Message, Result, Sender}
 import controllers.ResponseService._
 import models.DBTables._
+import play.api.Logger
 import play.api.db.slick.Config.driver.simple._
 import play.api.db.slick.DB
 import play.api.mvc.{Action, Controller}
@@ -54,6 +55,7 @@ object GCMService extends Controller {
   }
 
   def addUser(name : String, regId : String) : Int = DB.withSession { implicit session =>
+    Logger.logger.info(name + "/" + regId + "is registered")
     (Users returning Users.map(_.userId)) += UsersRow(0, Some(name), Some(regId))
   }
 
