@@ -20,8 +20,8 @@ object GCMService extends Controller {
   val GCM_ELEMENT_NAME : String = "gcm"
   val GCM_NAMESPACE : String = "google:mobile:data"
 
-  val PROJECT_ID : String = "472878111084"
-  val API_KEY = "AIzaSyAVmTBVe1ROIhVDUSqslcaSXKZ5IO70QoE"
+  val PROJECT_ID : String = "147568965374"
+  val API_KEY = "AIzaSyCvhmsezjny6VOZ6YSgqF2MTrzkzFlhcHg"
   val numOfRetries = 3
 
   //test
