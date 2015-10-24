@@ -17,4 +17,13 @@ object Application extends Controller {
     Ok(Weather.getTownWeather(Code("2611051000", "중앙동"))).as("text/xml")
   }
 
+  def getVersion = Action {
+    Ok("1")
+  }
+//  def getTownWeather = Action {
+//
+//    XML.
+//    Ok(Weather.getTownWeather(Code("2611051000", "중앙동")))
+//  }
+
 }
