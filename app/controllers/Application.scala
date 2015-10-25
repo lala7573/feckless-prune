@@ -1,11 +1,7 @@
 package controllers
 
-import java.io.File
-
-import com.friendly.umbrella.{TownForecast, Code, Weather}
+import com.friendly.umbrella.{Code, TownForecast, Weather}
 import play.api.mvc._
-
-import scala.io.Source
 
 object Application extends Controller {
 
@@ -22,7 +18,7 @@ object Application extends Controller {
   }
 
   def getVersion = Action {
-    Ok("201510242308")
+    Ok("201510251233")
   }
 
   val PRETTY_PRINT_INDENT_FACTOR : Int = 4
@@ -37,12 +33,12 @@ object Application extends Controller {
 }
 object CodePool {
   //todo should change
-  lazy val codeStr = Source.fromFile(new File("/Users/YeonjuMac/Desktop/locationCode.tsv"))
-  lazy val codes = codeStr.getLines().map{x=>
-    val xs = x.split("\t")
-
-    Code(xs(0), xs(1))
-  }
+  //lazy val codeStr = Source.fromFile(new File("/Users/YeonjuMac/Desktop/locationCode.tsv"))
+//  lazy val codes = codeStr.getLines().map{x=>
+//    val xs = x.split("\t")
+//
+//    Code(xs(0), xs(1))
+//  }
 }
 case class Location(x : Double, y : Double)
 class WeatherMap {
