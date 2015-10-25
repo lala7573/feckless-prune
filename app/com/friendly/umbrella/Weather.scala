@@ -1,5 +1,6 @@
 package com.friendly.umbrella
 
+
 import play.api.Play.current
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -112,7 +113,8 @@ object Weather {
  */
 case class TownForecastData(hour : Int, pty : Int)
 case class TownForecast(code : Code) {
-  val jsonStr = org.json.XML.toJSONObject(Weather.getTownWeather(code)).toString
+  import org.json.XML
+  val jsonStr = XML.toJSONObject(Weather.getTownWeather(code)).toString
   val json = Json.parse(jsonStr)
   val category = json \\ "category"
   val x = json \\ "x"
