@@ -26,8 +26,8 @@ object GCMService extends Controller {
 
   //test
   def send(regId : String, message : String) = Action {
-    if(message.length > 4096)
-      Ok(invalid("message is too long"))
+//    if(message.length > 4096)
+//      Ok(invalid("message is too long"))
 
     val sender : Sender = new Sender(API_KEY)
     val msg : Message = new Message.Builder().addData("message", message).build()
