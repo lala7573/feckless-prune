@@ -77,7 +77,7 @@ object Weather {
   def showAllRegions : String = {
     crawl
     val result = showAllRegions(topCodes, 0)
-    result.size.toString()
+    result.size.toString
   }
   private def showAllRegions(list : List[Code], count : Int) : List[Code] = {
 
@@ -101,17 +101,35 @@ object Weather {
     response.body
   }
 
+
 }
 
+
 /**
-implicit val residentReads: Reads[Resident] = (
-  (JsPath \ "name").read[String] and
-  (JsPath \ "age").read[Int] and
-  (JsPath \ "role").readNullable[String]
-)(Resident.apply _)
-  val nameReads: Reads[String] = (JsPath \ "name").read[String]
-val nameResult: JsResult[String] = json.validate[String](nameReads)
-nameResult match {
-  case s: JsSuccess[String] => println("Name: " + s.get)
-  case e: J
-  */
+ *
+ * @param hour 24h
+ * @param pty 0 없음 1 비 2 비눈 3 눈비 4 눈
+ */
+case class TownForecastData(hour : Int, pty : Int)
+case class TownForecast(code : Code) {
+  val jsonStr = org.json.XML.toJSONObject(Weather.getTownWeather(code)).toString
+  val json = Json.parse(jsonStr)
+  val category = json \\ "category"
+  val x = json \\ "x"
+  val y = json \\ "y"
+  val weatherData = json \\ "data"
+  println("234" + weatherData)
+  val townForecastData = weatherData.map{x=>
+    try{
+      println(x \ "hour")
+      println(x \ "pty")
+      Some(TownForecastData((x \ "hour").as[Int], (x \ "pty").as[Int]))
+    } catch {
+      case e : JsResultException =>
+        e.printStackTrace()
+        None
+    }
+  }.filter(_.isDefined).map(_.get)
+
+  lazy val willRain : Boolean = townForecastData.exists(_.pty==0)
+}

@@ -1,7 +1,11 @@
 package controllers
 
-import com.friendly.umbrella.{Code, Weather}
+import java.io.File
+
+import com.friendly.umbrella.{TownForecast, Code, Weather}
 import play.api.mvc._
+
+import scala.io.Source
 
 object Application extends Controller {
 
@@ -18,12 +22,33 @@ object Application extends Controller {
   }
 
   def getVersion = Action {
-    Ok("1")
+    Ok("201510242308")
   }
-//  def getTownWeather = Action {
-//
-//    XML.
-//    Ok(Weather.getTownWeather(Code("2611051000", "중앙동")))
-//  }
 
+  val PRETTY_PRINT_INDENT_FACTOR : Int = 4
+  def getTownWeatherJson = Action {
+    Ok(org.json.XML.toJSONObject(Weather.getTownWeather(Code("2611051000", "중앙동"))).toString(PRETTY_PRINT_INDENT_FACTOR)).as("application/json")
+  }
+
+  def getTownWeatherJson1 = Action {
+    val town = TownForecast(Code("2611051000", "중앙동"))
+    Ok("["+town.x + ", " + town.y+"] " + town.category + " "+ town.willRain)
+  }
+}
+object CodePool {
+  //todo should change
+  lazy val codeStr = Source.fromFile(new File("/Users/YeonjuMac/Desktop/locationCode.tsv"))
+  lazy val codes = codeStr.getLines().map{x=>
+    val xs = x.split("\t")
+
+    Code(xs(0), xs(1))
+  }
+}
+case class Location(x : Double, y : Double)
+class WeatherMap {
+//  val map : immutable.ParHashMap[Location, Code] = {
+//    CodePool.codes.map{x=>
+//      Weather.getTownWeather(x)
+//    }
+//  }
 }

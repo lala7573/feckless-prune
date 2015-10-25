@@ -6,7 +6,7 @@
 GET         /                                     controllers.Application.index
 GET         /version                              controllers.Application.getVersion
 GET         /crawl                                controllers.Application.test
-GET         /test                                 controllers.Application.getTownWeather
+GET         /test                                 controllers.Application.getTownWeatherJson1
 GET         /gcm/registerTest/:name/:regId        controllers.GCMService.registerTest(name : String, regId:String)
 
 
