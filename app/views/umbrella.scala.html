@@ -1,0 +1,19 @@
+@(routes : Seq[(String, String, String)])
+
+<h1>Welcome to IoT Umbrella</h1>
+<h3>Team. Frienldy</h3>
+
+<table>
+  <tr>
+        <th>method</th>
+        <th width="200">url</th>
+        <th width="500">subscription</th>
+  </tr>
+    @routes.map{route=>
+        <tr>
+            <td>@route._1</td>
+            <td>@route._2</td>
+            <td>@route._3</td>
+        </tr>
+    }
+</table>

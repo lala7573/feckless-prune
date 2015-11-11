@@ -9,6 +9,16 @@ object Application extends Controller {
     Ok(views.html.index("Your new application is ready."))
   }
 
+  def main = Action {
+    Ok(views.html.umbrella(Seq[(String, String, String)](
+      ("GET", "/weather/:code", "GET WEATHER BY CODE"),
+      ("GET", "/gcm/register", "GCM REGISTER. WILL GONNA DEPRECATED"),
+      ("POST", "/gcm/register", "GCM REGISTER"),
+      ("GET", "/gcm/send/:regId/:msg", "GCM SEND MESSAGES"),
+      ("POST", "/gcm/send/:regId/:msg", "GCM SEND MESSAGES")
+    )))
+  }
+
   def test = Action {
     Ok(Weather.showAllRegions)
   }
@@ -26,9 +36,14 @@ object Application extends Controller {
     Ok(org.json.XML.toJSONObject(Weather.getTownWeather(Code("2611051000", "중앙동"))).toString(PRETTY_PRINT_INDENT_FACTOR)).as("application/json")
   }
 
-  def getTownWeatherJson1 = Action {
-    val town = TownForecast(Code("2611051000", "중앙동"))
-    Ok("["+town.x + ", " + town.y+"] " + town.category + " "+ town.willRain)
+  def getTownWeatherJson1(code : String) = Action {
+    //check valid code
+    val town = TownForecast(Code(code, ""))
+    Ok("["+town.x + ", " + town.y+"] " + town.category + " "+ town.willRain + " " + town.maxPop)
+  }
+
+  def weatherTest(): Unit = {
+    Ok("hi")
   }
 }
 object CodePool {

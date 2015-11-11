@@ -110,28 +110,35 @@ object Weather {
  *
  * @param hour 24h
  * @param pty 0 없음 1 비 2 비눈 3 눈비 4 눈
+ * @param wfEn 날씨 상태 확인
+ * @param pop 강수확률
  */
-case class TownForecastData(hour : Int, pty : Int)
+case class TownForecastData(hour : Int, pty : Int, wfEn : String, pop : Int)
 case class TownForecast(code : Code) {
   import org.json.XML
   val jsonStr = XML.toJSONObject(Weather.getTownWeather(code)).toString
   val json = Json.parse(jsonStr)
+  println(json)
   val category = json \\ "category"
   val x = json \\ "x"
   val y = json \\ "y"
-  val weatherData = json \\ "data"
+  val weatherData = (json \\ "data").head.as[JsArray]
+
+  println("x : " + x + "\ty : " + y)
   println("234" + weatherData)
-  val townForecastData = weatherData.map{x=>
+
+  val townForecastData = weatherData.value.map{x=>
     try{
       println(x \ "hour")
       println(x \ "pty")
-      Some(TownForecastData((x \ "hour").as[Int], (x \ "pty").as[Int]))
+      Some(TownForecastData((x \ "hour").as[Int], (x \ "pty").as[Int], (x \ "wfEn").as[String], (x \ "pop").as[Int]))
     } catch {
       case e : JsResultException =>
-        e.printStackTrace()
+        println(e.getMessage)
         None
     }
   }.filter(_.isDefined).map(_.get)
 
   lazy val willRain : Boolean = townForecastData.exists(_.pty==0)
+  lazy val maxPop = townForecastData.maxBy[Int](_.pop)
 }
