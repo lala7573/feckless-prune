@@ -1,6 +1,8 @@
 package controllers
 
-import com.friendly.umbrella.{Code, TownForecast, Weather}
+import com.friendly.umbrella.{Code, Location, TownForecast, Weather}
+import controllers.ResponseService._
+import play.api.libs.json.Json
 import play.api.mvc._
 
 object Application extends Controller {
@@ -19,9 +21,6 @@ object Application extends Controller {
     )))
   }
 
-  def test = Action {
-    Ok(Weather.showAllRegions)
-  }
 
   def getTownWeather = Action {
     Ok(Weather.getTownWeather(Code("2611051000", "중앙동"))).as("text/xml")
@@ -31,35 +30,37 @@ object Application extends Controller {
     Ok("201510251233")
   }
 
-  val PRETTY_PRINT_INDENT_FACTOR : Int = 4
-  def getTownWeatherJson = Action {
-    Ok(org.json.XML.toJSONObject(Weather.getTownWeather(Code("2611051000", "중앙동"))).toString(PRETTY_PRINT_INDENT_FACTOR)).as("application/json")
+  def getLocationCode = Action(parse.json) { request =>
+    val fullRegionName = (request.body \ "region").asOpt[String]
+
+    if(fullRegionName.isEmpty)
+      Ok(invalid("invalid parameter"))
+
+    val location = Location.find(fullRegionName.get)
+
+    Ok(success(Json.obj("region"->fullRegionName, "code"->location.code)))
   }
 
-  def getTownWeatherJson1(code : String) = Action {
+
+  def getTownWeatherJson(code : String) = Action {
     //check valid code
     val town = TownForecast(Code(code, ""))
     Ok("["+town.x + ", " + town.y+"] " + town.category + " "+ town.willRain + " " + town.maxPop)
   }
 
+
+  /*test*/
   def weatherTest(): Unit = {
     Ok("hi")
   }
-}
-object CodePool {
-  //todo should change
-  //lazy val codeStr = Source.fromFile(new File("/Users/YeonjuMac/Desktop/locationCode.tsv"))
-//  lazy val codes = codeStr.getLines().map{x=>
-//    val xs = x.split("\t")
-//
-//    Code(xs(0), xs(1))
-//  }
-}
-case class Location(x : Double, y : Double)
-class WeatherMap {
-//  val map : immutable.ParHashMap[Location, Code] = {
-//    CodePool.codes.map{x=>
-//      Weather.getTownWeather(x)
-//    }
-//  }
+
+  val PRETTY_PRINT_INDENT_FACTOR : Int = 4
+  def test = Action {
+    Ok(org.json.XML.toJSONObject(Weather.getTownWeather(Code("2611051000", "중앙동"))).toString(PRETTY_PRINT_INDENT_FACTOR)).as("application/json")
+  }
+
+  def test2 = Action {
+    Ok(Weather.showAllRegions)
+  }
+
 }

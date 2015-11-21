@@ -6,14 +6,12 @@
 GET         /                                     controllers.Application.main
 GET         /version                              controllers.Application.getVersion
 GET         /crawl                                controllers.Application.test
-GET         /test                                 controllers.Application.getTownWeatherJson
 GET         /gcm/registerTest/:name/:regId        controllers.GCMService.registerTest(name : String, regId:String)
 
 
 # deploy
-#POST        /weather/test                         controllers.Application.weatherTest
-GET         /weather/:code                        controllers.Application.getTownWeatherJson1(code : String)
-GET         /gcm/register                         controllers.GCMService.register
+POST        /location                             controllers.Application.getLocationCode
+GET         /weather/:code                        controllers.Application.getTownWeatherJson(code : String)
 POST        /gcm/register                         controllers.GCMService.register
 GET         /gcm/send/:regId/:msg                 controllers.GCMService.send(regId : String, msg : String)
 POST        /gcm/send/:regId/:msg                 controllers.GCMService.send(regId : String, msg : String)
