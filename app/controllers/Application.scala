@@ -13,8 +13,8 @@ object Application extends Controller {
 
   def main = Action {
     Ok(views.html.umbrella(Seq[(String, String, String)](
+      ("POST", "/location", "Get location code from region name."),
       ("GET", "/weather/:code", "GET WEATHER BY CODE"),
-      ("GET", "/gcm/register", "GCM REGISTER. WILL GONNA DEPRECATED"),
       ("POST", "/gcm/register", "GCM REGISTER"),
       ("GET", "/gcm/send/:regId/:msg", "GCM SEND MESSAGES"),
       ("POST", "/gcm/send/:regId/:msg", "GCM SEND MESSAGES")

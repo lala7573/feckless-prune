@@ -1,13 +1,13 @@
 package controllers
 
-import com.google.android.gcm.server.{Message, Result, Sender}
+import com.google.android.gcm.server.{Result, Message, Sender}
 import controllers.ResponseService._
 import models.DBTables._
 import play.api.Logger
+import play.api.Play.current
 import play.api.db.slick.Config.driver.simple._
 import play.api.db.slick.DB
 import play.api.mvc.{Action, Controller}
-import play.api.Play.current
 
 object GCMService extends Controller {
 
@@ -23,8 +23,7 @@ object GCMService extends Controller {
   val PROJECT_ID : String = "147568965374"
   val API_KEY = "AIzaSyCvhmsezjny6VOZ6YSgqF2MTrzkzFlhcHg"
   val numOfRetries = 3
-
-  //test
+  
   def send(regId : String, message : String) = Action {
 //    if(message.length > 4096)
 //      Ok(invalid("message is too long"))
@@ -33,7 +32,8 @@ object GCMService extends Controller {
     val msg : Message = new Message.Builder().addData("message", message).build()
 
     val result : Result = sender.send(msg, regId, numOfRetries)
-    println(regId)
+
+    Logger.info("send " + regId + " msg : "+msg)
     Ok(success(regId + "\t" + result.getErrorCodeName +"\t" + result.getCanonicalRegistrationId + "\t" + result.getMessageId))
   }
 
